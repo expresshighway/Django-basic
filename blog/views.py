@@ -1,4 +1,5 @@
 from django.http.response import Http404
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Post
 from django.utils import timezone
@@ -28,7 +29,7 @@ def post_detail(request, pk):
     'post': post
   })
 
-# @Login_required
+@login_required
 def post_new(request):
   form = PostForm()
 
@@ -47,6 +48,7 @@ def post_new(request):
     'form': form
   })
 
+@login_required
 def post_edit(request, pk):
   post = get_object_or_404(Post, pk=pk)
   if request.method == 'POST':
@@ -63,11 +65,13 @@ def post_edit(request, pk):
     'form': form
   })
 
+@login_required
 def post_publish(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.publish()
     return redirect('post_detail', pk=pk)
 
+@login_required
 def post_remove(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()
